@@ -8,7 +8,7 @@ Implementar JPA no projeto desenvolvido na disciplina de POO do período anterio
 
 ![Diagrama do banco de dados](diagrama_bd-II.svg)
 
-### Explicações
+### Estrutura básica
 
 O diagrama representa a estrutura do banco de dados após o mapeamento das entidades com JPA/Hibernate.
 
@@ -21,7 +21,7 @@ O diagrama representa a estrutura do banco de dados após o mapeamento das entid
 - **Regra de preço:** `tb_regra_de_preco` não possui relacionamento direto com outras tabelas. As regras são consultadas pela aplicação para realizar o cálculo dos valores de aluguel, sem a necessidade de manter uma associação persistente com os períodos de exibição.
 - **Usuário:** `tb_usuario` é independente das demais tabelas e armazena os dados utilizados para acesso ao sistema.
 
-### Relacionamentos
+### Tipos de relacionamentos utilizados
 
 Os relacionamentos entre as entidades foram mapeados de acordo com a forma como os objetos são utilizados no sistema:
 
