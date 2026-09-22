@@ -4,9 +4,22 @@
 
 Implementar JPA no projeto desenvolvido na disciplina de POO do período anterior.
 
-## Diagrama lógico
+## Diagrama do banco de dados
 
 ![Diagrama do banco de dados](diagrama_bd-II.svg)
+
+### Explicações
+
+O diagrama representa a estrutura do banco de dados após o mapeamento das entidades com JPA/Hibernate.
+
+- **Pessoa, Locatário e Espectador:** a herança foi mapeada utilizando a estratégia `SINGLE_TABLE`. Por esse motivo, `Locatario` e `Espectador` não possuem tabelas próprias. Os dados são armazenados em `tb_pessoa`, e a coluna `tipo_pessoa` identifica o tipo correspondente de cada registro.
+- **Peça:** a classe `Peca` foi mapeada como `@Embeddable`, pois não possui identidade ou ciclo de vida independente. Dessa forma, não existe uma tabela específica para peça. Seu atributo `nome` é armazenado na coluna `nome_peca` da tabela `tb_proposta_de_aluguel`.
+- **Período de exibição:** cada proposta pode possuir vários períodos de exibição. Por isso, `tb_periodo_exibicao_peca` possui a chave estrangeira `proposta_id`, relacionando cada período com sua respectiva proposta.
+- **Valores diários de aluguel:** a classe `ControleValorDiarioAluguel` não é uma entidade independente. Seus dados fazem parte de cada período de exibição e são armazenados na tabela `tb_valor_diario_aluguel` por meio de `@ElementCollection`. A coluna `periodo_exibicao_id` indica a qual período cada valor diário pertence.
+- **Venda de ingressos:** cada venda está associada a um espectador e a uma proposta de aluguel. Essas associações são representadas pelas chaves estrangeiras `espectador_id` e `proposta_id` em `tb_venda_de_ingresso`.
+- **Ingressos:** uma venda pode gerar vários ingressos. A tabela `tb_ingresso` possui a chave estrangeira `venda_id`, responsável pela associação com a venda que originou o ingresso.
+- **Regra de preço:** `tb_regra_de_preco` não possui relacionamento direto com outras tabelas. As regras são consultadas pela aplicação para realizar o cálculo dos valores de aluguel, sem a necessidade de manter uma associação persistente com os períodos de exibição.
+- **Usuário:** `tb_usuario` é independente das demais tabelas e armazena os dados utilizados para acesso ao sistema.
 
 ## Como executar o programa
 
