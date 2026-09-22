@@ -14,6 +14,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+/**
+ * Representa uma regra utilizada para definir o valor de aluguel
+ * do teatro por hora.
+ *
+ * Uma regra pode possuir critérios específicos de ano, mês,
+ * dia da semana, turno e intervalo de horário. Os critérios
+ * não informados funcionam como condições genéricas para aplicação
+ * da regra.
+ */
 
 @NoArgsConstructor
 @Getter
@@ -80,6 +89,14 @@ public class RegraDePreco {
         return String.format("Ano: %d - Mês: %s - Dia: %s - Horário: %s", ano, mes, diaDaSemana, intervaloDeHorario);
     }
 
+    /**
+     * Verifica se esta regra possui a mesma configuração de outra regra,
+     * considerando o valor por hora e todos os critérios de aplicação.
+     *
+     * @param outraRegra regra que será comparada.
+     * @return true se as regras possuírem a mesma configuração,
+     * false caso contrário.
+     */
     public boolean temMesmaConfiguracao(RegraDePreco outraRegra) {
         return valorPorHora.compareTo(outraRegra.getValorPorHora()) == 0
                 && Objects.equals(ano, outraRegra.getAno())
@@ -92,6 +109,16 @@ public class RegraDePreco {
         );
     }
 
+    /**
+     * Atualiza os dados e critérios de aplicação desta regra de preço.
+     *
+     * @param valorPorHora novo valor cobrado por hora.
+     * @param ano novo ano de aplicação da regra.
+     * @param mes novo mês de aplicação da regra.
+     * @param diaDaSemana novo dia da semana de aplicação da regra.
+     * @param turno novo turno de aplicação da regra.
+     * @param intervaloDeHorario novo intervalo de horário de aplicação da regra.
+     */
     public void atualizarRegra(
             BigDecimal valorPorHora,
             Integer ano,
@@ -107,6 +134,17 @@ public class RegraDePreco {
         this.intervaloDeHorario = intervaloDeHorario;
     }
 
+    /**
+     * Verifica se os critérios de data e turno desta regra
+     * são compatíveis com a data e o turno informados.
+     *
+     * Critérios não definidos na regra não restringem sua aplicação.
+     *
+     * @param dataDaPeca data que será verificada.
+     * @param turnoPeca turno que será verificado.
+     * @return true se a regra for aplicável para a data e ao turno,
+     * false caso contrário.
+     */
     private boolean seAplicaNaDataETurno(LocalDate dataDaPeca, Turno turnoPeca) {
         if (ano != null && dataDaPeca.getYear() != ano) {
             return false;
@@ -127,6 +165,18 @@ public class RegraDePreco {
         return true;
     }
 
+    /**
+     * Verifica se esta regra de preço pode ser aplicada em uma
+     * determinada data, turno e horário.
+     *
+     * Caso a regra não possua intervalo de horário definido,
+     * a verificação considera apenas os critérios de data e turno.
+     *
+     * @param dataDaPeca data de exibição da peça.
+     * @param turnoPeca turno da exibição.
+     * @param horario horário que será avaliado.
+     * @return true se a regra puder ser aplicada, false caso contrário.
+     */
     public boolean seAplica(LocalDate dataDaPeca, Turno turnoPeca, LocalTime horario) {
         if (!seAplicaNaDataETurno(dataDaPeca, turnoPeca)) {
             return false;

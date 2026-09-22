@@ -54,6 +54,12 @@ public class DaoPropostaDeAluguel {
         return typedQuery.getResultList();
     }
 
+    /**
+     * Busca as propostas de aluguel que estão ativas ou que foram
+     * contratadas com alguma alteração.
+     *
+     * @return lista de propostas consideradas ativas.
+     */
     public List<PropostaDeAluguel> buscarAtivas() {
         TypedQuery<PropostaDeAluguel> typedQuery = entityManager.createQuery("select proposta from PropostaDeAluguel proposta where proposta.status = :statusAtivo or proposta.status = :statusAlterado", PropostaDeAluguel.class);
         typedQuery.setParameter("statusAtivo", Status.ATIVO);
@@ -62,6 +68,14 @@ public class DaoPropostaDeAluguel {
         return typedQuery.getResultList();
     }
 
+    /**
+     * Verifica se um novo período de exibição possui conflito de data
+     * e horário de ocupação do teatro com períodos já cadastrados
+     * em propostas que ainda não foram encerradas.
+     *
+     * @param periodoNovo período de exibição que será verificado.
+     * @throws NovoIntervaloGerandoConflitoException caso seja encontrado conflito.
+     */
     public void verificarConflitoComPeriodosExistentes(PeriodoExibicaoPeca periodoNovo) throws NovoIntervaloGerandoConflitoException {
         LocalDate dataInicioNovo = periodoNovo.getPeriodoDeTempo().getDataInicio();
         LocalDate dataFimNovo = periodoNovo.getPeriodoDeTempo().getDataFim();
@@ -83,6 +97,16 @@ public class DaoPropostaDeAluguel {
         }
     }
 
+    /**
+     * Calcula o valor total de aluguel recebido pelo teatro
+     * dentro do intervalo de datas informado.
+     *
+     * Para propostas encerradas, são considerados somente os valores
+     * correspondentes ao período até a data de encerramento.
+     *
+     * @param intervaloDatas intervalo de datas utilizado no cálculo.
+     * @return valor total dos aluguéis do teatro dentro do intervalo.
+     */
     public BigDecimal calcularValorTotalDeAluguelDoTeatroPorIntervalo(IntervaloDatas intervaloDatas) {
         BigDecimal total = BigDecimal.ZERO;
 

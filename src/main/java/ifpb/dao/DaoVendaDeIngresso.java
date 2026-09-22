@@ -47,6 +47,7 @@ public class DaoVendaDeIngresso {
         entityManager.getTransaction().commit();
     }
 
+
     public List<VendaDeIngresso> buscarPorProposta(PropostaDeAluguel proposta) {
         TypedQuery<VendaDeIngresso> typedQuery = entityManager.createQuery("select venda from VendaDeIngresso venda where venda.propostaDeAluguel = :proposta", VendaDeIngresso.class);
         typedQuery.setParameter("proposta", proposta);
@@ -54,6 +55,14 @@ public class DaoVendaDeIngresso {
         return typedQuery.getResultList();
     }
 
+    /**
+     * Busca as vendas de ingresso associadas a uma proposta de aluguel
+     * em uma determinada data de exibição.
+     *
+     * @param proposta proposta de aluguel relacionada às vendas.
+     * @param dataDaPeca data de exibição da peça.
+     * @return lista de vendas encontradas para a proposta e a data informadas.
+     */
     public List<VendaDeIngresso> buscarPorPropostaEData(PropostaDeAluguel proposta, LocalDate dataDaPeca) {
         TypedQuery<VendaDeIngresso> typedQuery = entityManager.createQuery("select venda from VendaDeIngresso venda where venda.propostaDeAluguel = :proposta and venda.dataDaPeca = :dataDaPeca", VendaDeIngresso.class);
         typedQuery.setParameter("proposta", proposta);
@@ -62,6 +71,14 @@ public class DaoVendaDeIngresso {
         return typedQuery.getResultList();
     }
 
+    /**
+     * Verifica se existem vendas de ingresso para uma proposta
+     * em datas posteriores à data informada.
+     *
+     * @param proposta proposta de aluguel que será verificada.
+     * @param dataEncerramento data utilizada como limite para a consulta.
+     * @return true se existir alguma venda após a data informada, false caso contrário.
+     */
     public boolean existeVendaAposData(PropostaDeAluguel proposta, LocalDate dataEncerramento) {
         TypedQuery<Long> typedQuery = entityManager.createQuery("select count(venda) from VendaDeIngresso venda where venda.propostaDeAluguel = :proposta and venda.dataDaPeca > :dataEncerramento", Long.class);
         typedQuery.setParameter("proposta", proposta);
@@ -70,6 +87,15 @@ public class DaoVendaDeIngresso {
         return typedQuery.getSingleResult() > 0;
     }
 
+    /**
+     * Gera a lista de presença de uma proposta em uma determinada data,
+     * agrupando as vendas por espectador e somando a quantidade de ingressos
+     * adquiridos por cada um.
+     *
+     * @param proposta proposta de aluguel utilizada para gerar a lista.
+     * @param dataDaPeca data de exibição da peça.
+     * @return lista de controle de presença dos espectadores.
+     */
     public List<ControlePresenca> gerarListaPresencaPorDataParaProposta(PropostaDeAluguel proposta, LocalDate dataDaPeca) {
         List<VendaDeIngresso> vendas = buscarPorPropostaEData(proposta, dataDaPeca);
         List<ControlePresenca> listaPresenca = new ArrayList<>();
@@ -94,6 +120,17 @@ public class DaoVendaDeIngresso {
         return listaPresenca;
     }
 
+    /**
+     * Gera o controle financeiro de uma proposta de aluguel,
+     * calculando o total arrecadado com ingressos, o valor do aluguel
+     * e o valor líquido resultante.
+     *
+     * Caso a proposta esteja encerrada, o aluguel é calculado somente
+     * até a data de encerramento.
+     *
+     * @param proposta proposta de aluguel utilizada no cálculo.
+     * @return controle financeiro contendo total arrecadado, valor do aluguel e valor líquido.
+     */
     public ControleFinanceiroProposta gerarControleFinanceiroProposta(PropostaDeAluguel proposta) {
         BigDecimal totalArrecadado = BigDecimal.ZERO;
 
@@ -116,6 +153,15 @@ public class DaoVendaDeIngresso {
         return new ControleFinanceiroProposta(totalArrecadado, valorAluguel, valorLiquido);
     }
 
+    /**
+     * Calcula o valor total das vendas de ingressos do teatro
+     * cujas datas de exibição estejam dentro do intervalo informado.
+     *
+     * As datas inicial e final do intervalo são consideradas no cálculo.
+     *
+     * @param intervaloDatas intervalo de datas utilizado no cálculo.
+     * @return valor total das vendas de ingressos no intervalo.
+     */
     public BigDecimal calcularTotalVendaIngressosDoTeatroPorIntervalo(IntervaloDatas intervaloDatas) {
         BigDecimal total = BigDecimal.ZERO;
 

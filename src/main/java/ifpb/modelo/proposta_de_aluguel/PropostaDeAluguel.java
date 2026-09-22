@@ -14,6 +14,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa uma proposta de aluguel do teatro.
+ *
+ * A proposta associa uma peça a um locatário, mantém seus períodos
+ * de exibição, o preço dos ingressos, o estado atual do contrato
+ * e as informações financeiras relacionadas ao seu encerramento.
+ */
+
 @Getter
 @NoArgsConstructor()
 
@@ -85,6 +93,12 @@ public class PropostaDeAluguel {
         return id != null ? id.hashCode() : 0;
     }
 
+    /**
+     * Calcula o valor total do aluguel da proposta somando
+     * os valores de todos os seus períodos de exibição.
+     *
+     * @return valor total do aluguel com duas casas decimais.
+     */
     public BigDecimal calcularValorTotalAluguel() {
         BigDecimal valorTotal = BigDecimal.ZERO;
 
@@ -95,6 +109,12 @@ public class PropostaDeAluguel {
         return valorTotal.setScale(2, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Obtém a primeira data de exibição considerando
+     * todos os períodos cadastrados na proposta.
+     *
+     * @return data de início mais antiga entre os períodos.
+     */
     public LocalDate gerarDataInicioAluguel() {
         LocalDate menorDataInicio = null;
 
@@ -108,6 +128,12 @@ public class PropostaDeAluguel {
         return menorDataInicio;
     }
 
+    /**
+     * Obtém a última data de exibição entre todos os períodos
+     * pertencentes à proposta.
+     *
+     * @return maior data de término encontrada nos períodos.
+     */
     public LocalDate gerarDataFimAluguel() {
         LocalDate maiorDataFim = null;
 
@@ -122,11 +148,26 @@ public class PropostaDeAluguel {
         return maiorDataFim;
     }
 
+    /**
+     * Adiciona um novo período de exibição na proposta
+     * e atualiza o status para contratado com alteração.
+     *
+     * @param novoPeriodo novo período de exibição da proposta.
+     */
     public void adicionarNovoPeriodo(PeriodoExibicaoPeca novoPeriodo) throws NovoIntervaloGerandoConflitoException {
         periodosDeTempoExibicao.add(novoPeriodo);
         status = Status.CONTRATADO_COM_ALTERACAO;
     }
 
+    /**
+     * Busca o período de exibição que contém a data informada.
+     *
+     * As datas inicial e final de cada período são consideradas
+     * pertencentes ao intervalo.
+     *
+     * @param data data de exibição que será procurada.
+     * @return período correspondente à data ou null caso não seja encontrado.
+     */
     public PeriodoExibicaoPeca buscarPeriodoPorData(LocalDate data) {
         for (PeriodoExibicaoPeca periodo : periodosDeTempoExibicao) {
             if (!data.isBefore(periodo.getPeriodoDeTempo().getDataInicio()) && !data.isAfter(periodo.getPeriodoDeTempo().getDataFim())) {
@@ -137,6 +178,12 @@ public class PropostaDeAluguel {
         return null;
     }
 
+    /**
+     * Gera todas as datas de exibição da proposta a partir
+     * dos períodos cadastrados.
+     *
+     * @return lista contendo todas as datas de exibição da proposta.
+     */
     public ArrayList<LocalDate> gerarDatasExibicao() {
         ArrayList<LocalDate> datas = new ArrayList<>();
 
@@ -153,6 +200,15 @@ public class PropostaDeAluguel {
         return datas;
     }
 
+    /**
+     * Calcula o valor do aluguel acumulado até a data informada,
+     * considerando os valores diários existentes nos períodos da proposta.
+     *
+     * A própria data limite também é considerada no cálculo.
+     *
+     * @param dataEncerramento data limite para o cálculo.
+     * @return valor do aluguel acumulado até a data informada.
+     */
     public BigDecimal calcularValorAluguelAteData(LocalDate dataEncerramento) {
         BigDecimal valorTotal = BigDecimal.ZERO;
 
@@ -167,6 +223,17 @@ public class PropostaDeAluguel {
         return valorTotal.setScale(2, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Verifica se uma data pode ser utilizada para o encerramento
+     * da proposta.
+     *
+     * A data é considerada válida quando pertence a pelo menos
+     * um dos períodos de exibição da proposta.
+     *
+     * @param dataEncerramento data que será validada.
+     * @return true se a data pertencer a algum período,
+     * false caso contrário.
+     */
     public boolean isDataEncerramentoValida(LocalDate dataEncerramento) {
         if (dataEncerramento == null) {
             return false;
@@ -184,6 +251,15 @@ public class PropostaDeAluguel {
         return false;
     }
 
+    /**
+     * Registra as informações financeiras do encerramento da proposta
+     * e altera seu status para encerrado.
+     *
+     * @param dataEncerramento data em que o contrato foi encerrado.
+     * @param valorIngressosRepassado valor proveniente dos ingressos
+     * que deve ser repassado após o acerto do aluguel.
+     * @param saldoAluguel valor de aluguel ainda devido no encerramento.
+     */
     public void registrarEncerramento(LocalDate dataEncerramento, BigDecimal valorIngressosRepassado, BigDecimal saldoAluguel) {
         this.dataEncerramento = dataEncerramento;
         this.valorIngressosRepassado = valorIngressosRepassado;

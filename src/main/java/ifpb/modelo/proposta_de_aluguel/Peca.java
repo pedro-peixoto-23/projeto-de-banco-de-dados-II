@@ -5,6 +5,14 @@ import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Representa a peça apresentada em uma proposta de aluguel.
+ *
+ * É utilizada como objeto embutido em PropostaDeAluguel,
+ * pois não possui identidade ou ciclo de vida independente
+ * dentro da aplicação.
+ */
+
 @Getter
 @NoArgsConstructor
 

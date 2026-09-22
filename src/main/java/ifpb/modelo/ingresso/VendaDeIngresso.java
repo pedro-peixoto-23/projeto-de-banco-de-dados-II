@@ -12,6 +12,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa uma venda de ingressos realizada para um espectador.
+ *
+ * A venda está associada a uma proposta de aluguel e a uma data
+ * específica de exibição, armazenando o valor unitário e os
+ * ingressos gerados para a compra.
+ */
+
 @Getter
 @NoArgsConstructor()
 
@@ -48,6 +56,12 @@ public class VendaDeIngresso {
         gerarIngressos(quantidade);
     }
 
+    /**
+     * Cria os ingressos correspondentes à quantidade adquirida
+     * e os associa a esta venda.
+     *
+     * @param quantidade quantidade de ingressos que serão gerados.
+     */
     private void gerarIngressos(int quantidade) {
         for (int i = 0; i < quantidade; i++) {
             Ingresso ingresso = new Ingresso(this);
@@ -55,10 +69,21 @@ public class VendaDeIngresso {
         }
     }
 
+    /**
+     * Informa quantos ingressos fazem parte da venda.
+     *
+     * @return total de ingressos da venda.
+     */
     public int getQuantidade() {
         return ingressos.size();
     }
 
+    /**
+     * Calcula o valor total da venda multiplicando o valor unitário
+     * pela quantidade de ingressos adquiridos.
+     *
+     * @return valor total da venda com duas casas decimais.
+     */
     public BigDecimal calcularValorTotal() {
         return valorUnitario.multiply(BigDecimal.valueOf(getQuantidade())).setScale(2, RoundingMode.HALF_UP);
     }

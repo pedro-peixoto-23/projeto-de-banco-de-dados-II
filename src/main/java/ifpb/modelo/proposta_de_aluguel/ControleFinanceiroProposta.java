@@ -5,6 +5,14 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+/**
+ * Reúne os resultados financeiros de uma proposta de aluguel.
+ *
+ * Contém o total arrecadado com a venda de ingressos,
+ * o valor do aluguel e o valor líquido resultante
+ * da diferença entre arrecadação e aluguel.
+ */
+
 @AllArgsConstructor
 @Getter
 public class ControleFinanceiroProposta {

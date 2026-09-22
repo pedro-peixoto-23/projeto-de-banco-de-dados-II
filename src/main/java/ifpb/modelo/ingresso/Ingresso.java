@@ -4,6 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Representa um ingresso individual gerado a partir
+ * de uma venda de ingressos.
+ *
+ * Cada ingresso possui identidade própria e permanece associado
+ * à venda responsável por sua criação.
+ */
+
 @NoArgsConstructor()
 @Getter
 

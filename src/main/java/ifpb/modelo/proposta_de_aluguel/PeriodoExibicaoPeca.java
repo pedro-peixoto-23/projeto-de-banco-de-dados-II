@@ -15,6 +15,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa um período de exibição de uma peça no teatro.
+ *
+ * Mantém o intervalo de datas, o turno, o horário da apresentação,
+ * o período de ocupação do teatro e os valores de aluguel
+ * calculados para cada dia de exibição.
+ */
+
 @Getter
 @NoArgsConstructor
 
@@ -72,6 +80,12 @@ public class PeriodoExibicaoPeca {
         return periodoDeTempo.toString();
     }
 
+    /**
+     * Calcula o valor total do aluguel deste período
+     * somando os valores calculados para cada dia.
+     *
+     * @return valor total do período.
+     */
     public BigDecimal gerarValorTotalPeriodo() {
         BigDecimal valorTotal = BigDecimal.ZERO;
 
@@ -82,6 +96,17 @@ public class PeriodoExibicaoPeca {
         return valorTotal;
     }
 
+    /**
+     * Calcula o valor do aluguel do teatro para uma determinada data.
+     *
+     * O intervalo de ocupação é percorrido minuto a minuto. Para cada
+     * minuto, são verificadas as regras de preço aplicáveis e utilizado
+     * o maior valor por hora encontrado.
+     *
+     * @param data data para a qual o valor será calculado.
+     * @param regrasDePreco regras disponíveis para o cálculo.
+     * @return valor total do aluguel referente à data.
+     */
     private BigDecimal calcularValorDiaria(LocalDate data, List<RegraDePreco> regrasDePreco) {
         LocalTime horarioAtual = intervaloDeOcupacaoDoTeatro.getHorarioInicio();
         LocalTime horarioFim = intervaloDeOcupacaoDoTeatro.getHorarioFim();
@@ -108,6 +133,13 @@ public class PeriodoExibicaoPeca {
         return valorTotal;
     }
 
+    /**
+     * Calcula e armazena o valor de aluguel de cada dia
+     * pertencente ao período de exibição.
+     *
+     * @param regrasDePreco regras utilizadas no cálculo
+     * dos valores diários.
+     */
     private void preencherValorDiarioAluguel(List<RegraDePreco> regrasDePreco) {
         listaControleValorDiarioAluguel.clear();
 

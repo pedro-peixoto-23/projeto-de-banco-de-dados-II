@@ -7,6 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Representa os dados comuns das pessoas cadastradas no sistema.
+ *
+ * Serve como classe base para locatários e espectadores.
+ * A persistência utiliza a estratégia SINGLE_TABLE, com um
+ * discriminador responsável por identificar cada tipo de pessoa.
+ */
+
 @Getter
 @NoArgsConstructor()
 

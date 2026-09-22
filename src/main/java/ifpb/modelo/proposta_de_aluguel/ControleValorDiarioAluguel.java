@@ -9,6 +9,14 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Representa o valor de aluguel calculado para um dia específico
+ * de um período de exibição.
+ *
+ * É armazenado como elemento da coleção de valores diários
+ * de PeriodoExibicaoPeca e não possui identidade própria.
+ */
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor()

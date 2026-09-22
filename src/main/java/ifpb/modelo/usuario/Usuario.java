@@ -5,6 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Representa um usuário responsável pelo acesso ao sistema.
+ *
+ * Armazena os dados utilizados para identificação e autenticação,
+ * incluindo nome, e-mail e senha.
+ */
+
 @NoArgsConstructor()
 @Getter
 
