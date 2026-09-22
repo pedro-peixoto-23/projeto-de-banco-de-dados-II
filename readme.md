@@ -4,6 +4,10 @@
 
 Implementar JPA no projeto desenvolvido na disciplina de POO do período anterior.
 
+## Diagrama lógico
+
+![Diagrama do banco de dados](diagrama_bd-II.svg)
+
 ## Como executar o programa
 
 Basta executar o arquivo `Main.java`, localizado em: `src/main/java/ifpb/Main.java`.
