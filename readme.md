@@ -21,6 +21,17 @@ O diagrama representa a estrutura do banco de dados após o mapeamento das entid
 - **Regra de preço:** `tb_regra_de_preco` não possui relacionamento direto com outras tabelas. As regras são consultadas pela aplicação para realizar o cálculo dos valores de aluguel, sem a necessidade de manter uma associação persistente com os períodos de exibição.
 - **Usuário:** `tb_usuario` é independente das demais tabelas e armazena os dados utilizados para acesso ao sistema.
 
+### Relacionamentos
+
+Os relacionamentos entre as entidades foram mapeados de acordo com a forma como os objetos são utilizados no sistema:
+
+- **`PropostaDeAluguel` e `Locatario`:** relacionamento **N:1 unidirecional** (`@ManyToOne`). Várias propostas podem pertencer ao mesmo locatário, enquanto `Locatario` não mantém uma coleção de propostas.
+- **`PropostaDeAluguel` e `PeriodoExibicaoPeca`:** relacionamento **1:N unidirecional** (`@OneToMany`). Uma proposta pode possuir vários períodos de exibição, mas cada período não mantém uma referência para sua proposta.
+- **`VendaDeIngresso` e `Espectador`:** relacionamento **N:1 unidirecional** (`@ManyToOne`). Um espectador pode realizar várias compras de ingressos, enquanto a venda mantém a referência para o espectador responsável pela compra.
+- **`VendaDeIngresso` e `PropostaDeAluguel`:** relacionamento **N:1 unidirecional** (`@ManyToOne`). Uma proposta pode estar relacionada com várias vendas, mas somente a venda mantém a referência para a proposta.
+- **`VendaDeIngresso` e `Ingresso`:** relacionamento **1:N bidirecional**. `VendaDeIngresso` possui uma coleção de ingressos com `@OneToMany`, enquanto cada `Ingresso` possui uma referência para sua venda por meio de `@ManyToOne`.
+- **`PeriodoExibicaoPeca` e `ControleValorDiarioAluguel`:** não formam um relacionamento entre entidades. `ControleValorDiarioAluguel` é um `@Embeddable` armazenado em uma coleção com `@ElementCollection`, fazendo com que cada período possua vários valores diários de aluguel.
+
 ## Como executar o programa
 
 Basta executar o arquivo `Main.java`, localizado em: `src/main/java/ifpb/Main.java`.
