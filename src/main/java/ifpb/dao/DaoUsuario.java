@@ -45,7 +45,7 @@ public class DaoUsuario {
             throw new EmailNaoExistenteException(email);
         }
 
-        return usuarios.getFirst();
+        return usuarios.get(0);
     }
 
     public boolean existeUsuarioComEmail(String email) {

@@ -21,7 +21,7 @@ public class OuvinteBotaoEsqueceuSenha implements ActionListener {
     public void actionPerformed(ActionEvent botaoEsqueceuSenhaPressionado) {
         DaoUsuario daoUsuario = Sessao.getDaoUsuario();
 
-        Usuario usuario = daoUsuario.buscarTodos().getFirst();
+        Usuario usuario = daoUsuario.buscarTodos().get(0);
 
         long codigoConfirmacaoGerado = System.currentTimeMillis();
 
